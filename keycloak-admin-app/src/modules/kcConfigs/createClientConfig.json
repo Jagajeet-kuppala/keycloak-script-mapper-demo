@@ -1,0 +1,7 @@
+{
+  "clientId": "demo-app",
+  "baseUrl": "http://localhost:3000",
+  "redirectUris": [
+    "http://localhost:3000/*"
+  ]
+}

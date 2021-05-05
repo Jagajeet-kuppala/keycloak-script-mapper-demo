@@ -1,0 +1,13 @@
+{
+"authenticators": [
+],
+"policies": [
+],
+"mappers": [
+{
+"name": "Async Demo Mapper",
+"fileName": "randomClaim.js",
+"description": "My Mapper from a JS file"
+}
+]
+}

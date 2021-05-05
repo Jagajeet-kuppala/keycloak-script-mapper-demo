@@ -1,0 +1,8 @@
+{
+  "config": {
+    "access.token.claim": true
+  },
+  "name": "demo-mapper",
+  "protocol": "openid-connect",
+  "protocolMapper": "script-randomClaim.js"
+}
