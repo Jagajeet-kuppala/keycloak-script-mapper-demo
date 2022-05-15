@@ -1,0 +1,36 @@
+# Keycloak Setup on Minikube
+
+# Prerequisites
+- brew install kubectl 
+- brew install hyperkit (If Docker for Desktop is installed, you already have HyperKit)
+- brew install minikube
+- brew install wget
+- brew install gnu-sed (If not already installed)
+
+# Docker version 
+- docker run -p 8080:8080 --name keycloak-server -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin jboss/keycloak -Dkeycloak.profile.feature.upload_scripts=enabled -b 0.0.0.0
+- docker run -p 8080:8080 --name keycloak-server -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin jboss/keycloak -b 0.0.0.0
+- docker run -p 9090:8080 --name keycloak-server -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin jboss/keycloak -b 0.0.0.0
+# Deploy Keycloak
+- minikube start --memory 6000 --cpus=4 --driver=hyperkit
+- eval $(minikube docker-env)
+- minikube addons enable ingress
+- kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
+- [only for the 1st time] ~
+  wget -q -O - https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak-ingress.yaml | \
+  sed "s/KEYCLOAK_HOST/keycloak.$(minikube ip).nip.io/" | \
+  kubectl create -f -
+- KEYCLOAK_URL=https://keycloak.$(minikube ip).nip.io/auth && echo "Keycloak Admin Console:   $KEYCLOAK_URL/admin"
+
+# Destroy resources
+- kubectl delete all --all
+- minikube stop
+
+# Deploy a JAR  
+- jar cf <>.jar META_INF files
+- kubectl exec --stdin --tty <POD NAME> -- /bin/bash
+- cd /opt/jboss/keycloak/standalone/deployments
+- kubectl cp script_jar.jar keycloak-b6b94bd59-h52tk:/opt/jboss/keycloak/standalone/deployments
+
+# Deploying a theme in Keycloak (Copying theme directly)
+- docker cp themes/. <Keycloak-container-id>:/opt/jboss/keycloak/themes (Copy the custom-theme foler into Keyclaok themes)
